@@ -16,7 +16,7 @@ export default {
     data() {
         return {
             instance: null,
-            slides: this.options.items
+            slides: this.options && this.options.items
         }
     },
     props: {

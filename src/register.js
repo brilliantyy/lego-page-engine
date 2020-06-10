@@ -16,15 +16,22 @@ function constructPage() {
         setPageData(pageConfig)
 
         if (!!componentsConfig.length) {
-            componentsConfig.forEach(data => {
+            componentsConfig.forEach(async data => {
                 const CmpConstructor = Vue.component(data.name)
-              
+                
                 if (typeof CmpConstructor === 'function') {
+                    let initialState = {}
+                    const tempInstance = new CmpConstructor()
+                    const { getInitialState } = tempInstance.$options.methods
+                    if (typeof getInitialState === 'function') {
+                        initialState = await getInitialState.call(tempInstance, { id: data.id, options: data.options })
+                    }
                     const cmpInstance = new CmpConstructor({
                         propsData: {
                             id: data.id,
                             css: transformCss(data.css),
-                            options: data.options
+                            options: data.options,
+                            initialState: initialState
                         }
                     }).$mount()
                     cmps.push(cmpInstance.$el)

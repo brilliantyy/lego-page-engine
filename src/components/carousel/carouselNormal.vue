@@ -2,7 +2,7 @@
     <div :style="wrapperStyle">
         <div class="swiper-container" :id="id" :style="contentStyle">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="(url, index) in slides" :key="index">
+                <div class="swiper-slide" v-for="(url, index) in initialState.slides" :key="index">
                     <img :src="url" :style="{ objectFit: css.objectFit }">
                 </div>
             </div>
@@ -31,6 +31,10 @@ export default {
         options: {
             type: Object,
             default: () => {}
+        },
+        initialState: {
+            type: Object,
+            default: () => {}
         }
     },
     computed: {
@@ -47,7 +51,7 @@ export default {
     },
     mounted() {
         // console.log('result0')
-        this.fetch()
+        this.initSwiper()
         // console.log('result1')
         // this.fetch(1)
         // console.log('result2')
@@ -59,24 +63,33 @@ export default {
         this.instance.destroy()
     },
     methods: {
-        async fetch() {
+        getInitialState(config) {
+            return new Promise(async (resolve, reject) => {
+                const slides = await this.fetch(config)
+                resolve({ slides })
+            })
+        },
+        initSwiper() {
+            this.$nextTick(() => {
+                const swiperOptions = {
+                    loop: true,
+                    autoplay: this.options.autoplay,
+                    speed: this.options.speed,
+                    delay: this.options.delay,
+                    effect: this.options.effect,
+                    pagination: {
+                        el: '.swiper-pagination'
+                    }
+                }
+                this.instance = new Swiper(`#${this.id}`, swiperOptions)
+            })
+        },
+        async fetch(config) {
             const result = await this.$dataService.fetch({ source: 'bannerSource' })
             if (result.code === 0 && !!result.data.length) {
-                this.slides = result.data.slice(0, this.options.nums)
-                this.$nextTick(() => {
-                    const swiperOptions = {
-                        loop: true,
-                        autoplay: this.options.autoplay,
-                        speed: this.options.speed,
-                        delay: this.options.delay,
-                        effect: this.options.effect,
-                        pagination: {
-                            el: '.swiper-pagination'
-                        }
-                    }
-                    this.instance = new Swiper(`#${this.id}`, swiperOptions)
-                })
-            }
+                return result.data.slice(0, config.options.nums)
+            } 
+            return []
         }
     }
 }
