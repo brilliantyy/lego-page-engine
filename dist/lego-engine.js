@@ -3634,7 +3634,7 @@
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return DataService.fetch({
+                  return _this.$dataService.fetch({
                     source: 'bannerSource'
                   });
 
@@ -3923,7 +3923,7 @@
               switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return DataService.fetch({
+                  return _this.$dataService.fetch({
                     source: 'bannerSource'
                   });
 
@@ -11207,8 +11207,6 @@
               callbacks = _this$requestMap$get.callbacks,
               cacheData = _this$requestMap$get.cacheData;
 
-          console.log('status: ', status);
-
           switch (status) {
             case 0:
               // 等待中 
@@ -11493,10 +11491,14 @@
     return DataCenter;
   }();
 
-  var dataCenter = new DataCenter();
+  var DataService = {
+    install: function install(Vue) {
+      Vue.prototype.$dataService = new DataCenter();
+    }
+  };
 
   Vue.use(Http);
-  window.DataService = dataCenter;
+  Vue.use(DataService);
   initPage();
 
 }(Vue, crypto));

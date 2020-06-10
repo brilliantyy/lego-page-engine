@@ -55,7 +55,7 @@ export default {
     },
     methods: {
         async fetch() {
-            const result = await DataService.fetch({ source: 'bannerSource' })
+            const result = await this.$dataService.fetch({ source: 'bannerSource' })
             if (result.code === 0 && !!result.data.length) {
                 this.slides = result.data.slice(0, this.options.nums)
                 this.$nextTick(() => {

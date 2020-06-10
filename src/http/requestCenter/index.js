@@ -11,7 +11,6 @@ class RequestCenter {
         const key = this.genHash(url, method, params)
         if (this.requestMap.has(key)) {
             const { status, callbacks, cacheData } = this.requestMap.get(key)
-            console.log('status: ', status)
 
             switch(status) {
                 case 0:                              // 等待中 

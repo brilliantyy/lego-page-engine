@@ -1,5 +1,7 @@
 import { DataCenter } from './dataCenter'
 
-const dataCenter = new DataCenter()
-
-export default dataCenter
+export default {
+    install: (Vue) => {
+        Vue.prototype.$dataService = new DataCenter()
+    }
+}

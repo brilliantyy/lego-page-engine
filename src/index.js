@@ -5,6 +5,6 @@ import DataService from '@/http/dataCenter'
 import '@/style/common.css'
 
 Vue.use(Http)
-window.DataService = DataService
+Vue.use(DataService)
 
 initPage()
