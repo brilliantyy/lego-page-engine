@@ -9,14 +9,15 @@ function registerComponents () {
     })
 }
 
-function constructPage() {
+async function constructPage() {
     if (window.__PAGE_DATA__) {
         const cmps = []
         let { pageConfig, componentsConfig } = __PAGE_DATA__
         setPageData(pageConfig)
 
         if (!!componentsConfig.length) {
-            componentsConfig.forEach(async data => {
+            for (let i = 0; i < componentsConfig.length; i++) {
+                const data = componentsConfig[i]
                 const CmpConstructor = Vue.component(data.name)
                 
                 if (typeof CmpConstructor === 'function') {
@@ -36,9 +37,8 @@ function constructPage() {
                     }).$mount()
                     cmps.push(cmpInstance.$el)
                 }
-            })
+            }
         }
-       
         const rootEl = document.getElementById('lego-app')
         cmps.forEach(el => {
             rootEl.appendChild(el)

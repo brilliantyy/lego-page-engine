@@ -70,19 +70,19 @@ export default {
             })
         },
         initSwiper() {
-            this.$nextTick(() => {
-                const swiperOptions = {
-                    loop: true,
-                    autoplay: this.options.autoplay,
-                    speed: this.options.speed,
-                    delay: this.options.delay,
-                    effect: this.options.effect,
-                    pagination: {
-                        el: '.swiper-pagination'
-                    }
+            const swiperOptions = {
+                loop: true,
+                autoplay: this.options.autoplay,
+                speed: this.options.speed,
+                delay: this.options.delay,
+                effect: this.options.effect,
+                pagination: {
+                    el: '.swiper-pagination'
                 }
+            }
+            setTimeout(() => {
                 this.instance = new Swiper(`#${this.id}`, swiperOptions)
-            })
+            }, 20)
         },
         async fetch(config) {
             const result = await this.$dataService.fetch({ source: 'bannerSource' })

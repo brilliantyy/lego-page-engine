@@ -65,27 +65,32 @@ export default {
             })
         },
         initSwiper() {
-            this.$nextTick(() => {
-                const swiperOptions = {
-                    slidesPerView: 'auto',
-                    watchSlidesProgress: true,
-                    centeredSlides: true,
-                    loop: true,
-                    autoplay: this.options.autoplay,
-                    speed: this.options.speed,
-                    delay: this.options.delay,
-                    loopedSlides: 3,
-                    effect: 'coverflow',
-                    coverflowEffect: {
-                        rotate: 0,
-                        stretch: 10,
-                        depth: 80,
-                        modifier: 3,
-                        slideShadows : true
-                    }
+            const swiperOptions = {
+                slidesPerView: 'auto',
+                watchSlidesProgress: true,
+                centeredSlides: true,
+                loop: true,
+                autoplay: this.options.autoplay,
+                speed: this.options.speed,
+                delay: this.options.delay,
+                loopedSlides: 3,
+                effect: 'coverflow',
+                coverflowEffect: {
+                    rotate: 0,
+                    stretch: 10,
+                    depth: 80,
+                    modifier: 3,
+                    slideShadows : true
                 }
+            }
+            /**
+             * this.$nextTick doesn't work when there are more than one swipers exist on the page
+             * setTimeout delay time should >= 4, but with the number of swipers grows, the time
+             * should be bigger too, or there will be unexpected bugs
+             */
+            setTimeout(() => {
                 this.instance = new Swiper(`#${this.id}`, swiperOptions)
-            })
+            }, 20)
         },
         async fetch(config) {
             const result = await this.$dataService.fetch({ source: 'bannerSource' })
