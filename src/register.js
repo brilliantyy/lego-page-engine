@@ -23,9 +23,11 @@ async function constructPage() {
                 if (typeof CmpConstructor === 'function') {
                     let initialState = {}
                     const tempInstance = new CmpConstructor()
-                    const { getInitialState } = tempInstance.$options.methods
-                    if (typeof getInitialState === 'function') {
-                        initialState = await getInitialState.call(tempInstance, { id: data.id, options: data.options })
+                    if (tempInstance.$options.methods) {
+                        const { getInitialState } = tempInstance.$options.methods
+                        if (typeof getInitialState === 'function') {
+                            initialState = await getInitialState.call(tempInstance, { id: data.id, options: data.options })
+                        }
                     }
                     const cmpInstance = new CmpConstructor({
                         propsData: {
@@ -49,7 +51,7 @@ async function constructPage() {
 }
 
 function setPageData(pageConfig) {
-    const { title, pageHeight, backgroundColor, backgroundImage, backgroundRepeat } = pageConfig
+    const { title, pageHeight, backgroundColor, backgroundImage, backgroundRepeat, backgroundSize } = pageConfig
     const rootFontSize = parseFloat(document.documentElement.style.fontSize)
 
     document.title = title
@@ -57,6 +59,7 @@ function setPageData(pageConfig) {
     document.body.style.backgroundImage = `url(${backgroundImage})`
     document.body.style.backgroundColor = backgroundColor
     document.body.style.backgroundRepeat = backgroundRepeat
+    document.body.style.backgroundSize = backgroundSize
 }
 
 function transformCss(cssObj) {
